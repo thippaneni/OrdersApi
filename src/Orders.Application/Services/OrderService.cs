@@ -3,11 +3,12 @@ using Orders.Domain.Models;
 
 namespace Orders.Application.Services
 {
-    public class OrderService : IOrderService
+    public class OrderService(IEventPublisher eventPublisher) : IOrderService
     {
-        public Task CreateOrderAsync(Order order)
+        private readonly IEventPublisher _eventPublisher = eventPublisher;
+        public async Task CreateOrderAsync(Order order)
         {
-            throw new NotImplementedException();
+            await _eventPublisher.PublishAsync(order, "order-placed-topic");
         }
     }
 }
