@@ -10,13 +10,14 @@ namespace Orders.Infrastructure.Services
         private readonly ServiceBusClient _client = client;
         public async Task PublishAsync(Order order, string topicName)
         {
-            var sender = _client.CreateSender(topicName);
+            var orderSender = _client.CreateSender(topicName);
+            
             var message = new ServiceBusMessage(JsonSerializer.Serialize(order))
             {
                 ContentType = "application/json"
             };
 
-            await sender.SendMessageAsync(message);
+            await orderSender.SendMessageAsync(message);
         }
     }
 }
